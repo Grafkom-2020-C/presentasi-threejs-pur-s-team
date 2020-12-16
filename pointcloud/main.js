@@ -24,7 +24,7 @@ function init() {
     var cloud;
 
     var controls = new function () {
-        this.size = 4;
+        this.size = 1;
         this.transparent = true;
         this.opacity = 0.6;
         this.vertexColors = true;
@@ -53,7 +53,7 @@ function init() {
     render();
 
     function createParticles(size, transparent, opacity, vertexColors, sizeAttenuation, color) {
-
+        var usePredefinedObject = true;
 
         var geom = new THREE.Geometry();
         var material = new THREE.PointsMaterial({
@@ -67,16 +67,29 @@ function init() {
             color: color
         });
 
-
-        var range = 500;
-        for (var i = 0; i < 15000; i++) {
-            var particle = new THREE.Vector3(Math.random() * range - range / 2, Math.random() * range - range / 2, Math.random() * range - range / 2);
-            geom.vertices.push(particle);
-            var color = new THREE.Color(0x00ff00);
-            // color.setHSL(color.getHSL().h, color.getHSL().s, Math.random() * color.getHSL().l);
-            color.setHSL(0.5, 1, Math.random());
-            geom.colors.push(color);
-
+        if(!usePredefinedObject){
+            var range = 500;
+            for (var i = 0; i < 15000; i++) {
+                var particle = new THREE.Vector3(Math.random() * range - range / 2, Math.random() * range - range / 2, Math.random() * range - range / 2);
+                geom.vertices.push(particle);
+                var color = new THREE.Color(0x00ff00);
+                // color.setHSL(color.getHSL().h, color.getHSL().s, Math.random() * color.getHSL().l);
+                color.setHSL(0.5, 1, Math.random());
+                geom.colors.push(color);
+    
+            }
+        } else {
+            var predefinedObject = get_PursObject();
+            var lenObject = predefinedObject.length;
+            var scale = 70;
+            for(var i = 0 ; i < lenObject; i++){
+                var particle = new THREE.Vector3(predefinedObject[i][0] * scale, predefinedObject[i][1] * scale, predefinedObject[i][2] * scale);
+                geom.vertices.push(particle);
+                var color = new THREE.Color(0x00ff00);
+                // color.setHSL(color.getHSL().h, color.getHSL().s, Math.random() * color.getHSL().l);
+                color.setHSL(0.5, 1, Math.random());
+                geom.colors.push(color);
+            }
         }
 
         cloud = new THREE.Points(geom, material);
